@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import java.util.List;
 
 @Data //provides getters, setters, HashCodeAndEquals, RequiredArgsConstructor, to string
-@Entity // <- JPA entity
+//@Entity // <- JPA entity
 //@Table("user") //<- JPA table
 public class User {
 

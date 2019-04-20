@@ -5,13 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.javowe.swirki.zzpjapp.exception.UserNotFoundException;
 import pl.javowe.swirki.zzpjapp.model.User;
-import pl.javowe.swirki.zzpjapp.repository.UserRepository;
+//import pl.javowe.swirki.zzpjapp.repository.UserRepository;
 
 import java.util.List;
 
 @RestController
 public class UserController {
-
+/*
     private final UserRepository repository;
 
     public UserController(UserRepository repository){
@@ -52,6 +52,6 @@ public class UserController {
         this.repository.deleteById(id);
     }
 
-
+*/
 
 }
