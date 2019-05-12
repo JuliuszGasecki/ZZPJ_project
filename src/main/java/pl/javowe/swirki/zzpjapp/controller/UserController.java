@@ -1,19 +1,22 @@
 package pl.javowe.swirki.zzpjapp.controller;
 
 
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.javowe.swirki.zzpjapp.exception.UserNotFoundException;
 import pl.javowe.swirki.zzpjapp.model.User;
-//import pl.javowe.swirki.zzpjapp.repository.UserRepository;
+import pl.javowe.swirki.zzpjapp.repository.UserRepository;
 
 import java.util.List;
 
+
 @RestController
 public class UserController {
-/*
-    private final UserRepository repository;
 
+    private UserRepository repository;
+    @Autowired
     public UserController(UserRepository repository){
         this.repository = repository;
     }
@@ -51,7 +54,5 @@ public class UserController {
     void deleteUser(@PathVariable Long id) {
         this.repository.deleteById(id);
     }
-
-*/
 
 }
