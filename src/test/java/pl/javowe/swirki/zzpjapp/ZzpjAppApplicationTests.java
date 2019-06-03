@@ -33,10 +33,10 @@ public class ZzpjAppApplicationTests {
 
 	@BeforeClass
 	public static void init_test_data() {
-		user1 = new User("test1@example.com", 1, Locations.Ukraine, "Test1", "Pierwszy", true, "Użytkownik testowy nr 1");
-		user2 = new User("test2@example.com", 2, Locations.Poland, "Test2", "Drugi", false, "Użytkownik testowy nr 2");
-		user3 = new User("test3@example.com", 1000, Locations.Poland, "Test3", "Trzeci", false, "Użytkownik testowy nr 3 - invalid");
-		user4 = new User("test4", 10, Locations.Poland, "Test4", "Czwarty", false, "Użytkownik testowy nr 4 - invalid");
+		user1 = new User("A","admin1", "test1@example.com", 1, Locations.Ukraine, "Test1", "Pierwszy", true, "Użytkownik testowy nr 1");
+		user2 = new User("B","admin1", "test2@example.com", 2, Locations.Poland, "Test2", "Drugi", false, "Użytkownik testowy nr 2");
+		user3 = new User("C","admin1", "test3@example.com", 1000, Locations.Poland, "Test3", "Trzeci", false, "Użytkownik testowy nr 3 - invalid");
+		user4 = new User("D","admin1", "test4", 10, Locations.Poland, "Test4", "Czwarty", false, "Użytkownik testowy nr 4 - invalid");
 	}
 
 	@Before

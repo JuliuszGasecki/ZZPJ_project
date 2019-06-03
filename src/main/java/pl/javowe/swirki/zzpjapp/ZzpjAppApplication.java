@@ -35,10 +35,10 @@ public class ZzpjAppApplication {
 	@Bean
 	CommandLineRunner initDatabase(UserController controller) {
 		return args -> {
-			controller.validateAndAddUser(new User("abc@gmail.com", 34, Locations.Poland, "Julek", "Gąska", true, "nie lubi w pupe"));
-			controller.validateAndAddUser(new User("example@gmail.com", 22, Locations.Ukraine, "Jan", "Kowalski", false, "Jan Kowalski"));
-			controller.validateAndAddUser(new User("abc@example.com", 30, Locations.Poland, "Anna", "Kowalska", false, "Anna Kowalska"));
-			controller.validateAndAddUser(new User("abc", 33, Locations.Poland, "Franek", "Pomyłka", false, "Niepoprawny e-mail"));
+			controller.validateAndAddUser(new User("A", "admin1", "abc@gmail.com", 34, Locations.Poland, "Julek", "Gąska", true, "nie lubi w pupe"));
+			controller.validateAndAddUser(new User("B","admin1", "example@gmail.com", 22, Locations.Ukraine, "Jan", "Kowalski", false, "Jan Kowalski"));
+			controller.validateAndAddUser(new User("C","admin1", "abc@example.com", 30, Locations.Poland, "Anna", "Kowalska", false, "Anna Kowalska"));
+			controller.validateAndAddUser(new User("D","admin1", "abc", 33, Locations.Poland, "Franek", "Pomyłka", false, "Niepoprawny e-mail"));
 		};
 	}
 }

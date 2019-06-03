@@ -4,6 +4,9 @@ package pl.javowe.swirki.zzpjapp.controller;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import pl.javowe.swirki.zzpjapp.exception.UserNotFoundException;
 import pl.javowe.swirki.zzpjapp.model.User;
@@ -18,7 +21,7 @@ import java.util.Set;
 
 
 @RestController
-public class UserController {
+public class UserController{
     private UserRepository repository;
     private ValidatorFactory factory;
     private Validator validator;
@@ -79,5 +82,4 @@ public class UserController {
         else
             return false;
     }
-
 }
