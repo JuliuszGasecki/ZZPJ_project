@@ -23,7 +23,9 @@ public class ZzpjAppApplication {
 	@Bean
 	CommandLineRunner initDatabase(UserRepository repository) {
 		return args -> {
-			repository.save(new User("abc.@gmail.com", 34, Locations.Poland, "Julek", "Gąska", true, "nie lubi w pupe"));
+			repository.save(new User("abc.@gmail.com", 22, Locations.Poland, "Julek", "Gąska", true, "nie lubi w pupe"));
+			repository.save(new User("absc.@gmail.com", 34, Locations.Poland, "Jan", "Kowalski", true, "Jestem studentem i kocham sie najebać ;D"));
+			repository.save(new User("asd.@gmail.com", 324, Locations.Poland, "Kraszan", "Kubuś", true, "Lol nie"));
 		};
 	}
 }
