@@ -3,10 +3,10 @@ package pl.javowe.swirki.zzpjapp.model;
 import lombok.Data;
 import org.hibernate.annotations.Table;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.Locale;
 
@@ -17,14 +17,33 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) //primary key generated with TopLink
+    @Column(name = "id", nullable =  false)
     private Long id;
+
+    @Column(name = "emailAddress", nullable = false)
+    @Email
     private String emailAdress;
+
+    @Column(name = "age", nullable =  false)
+    @Min(0)
+    @Max(100)
     private int age;
+
+    @Column(name = "location", nullable = false)
     private Locations location; //<- select location from list
+
+    @Column(name = "firstName", nullable = false, length = 25)
     private String firstName;
+
+    @Column(name = "lastName", nullable = false, length = 25)
     private String lastName;
+
+    @Column(name = "isAdmin", nullable = false)
     private boolean isAdmin;
+
+    @Column(name = "description", nullable = false)
     private String description;
+
    /* //TODO programming languages class with experience level
     private List<String> programmingLanguages;
     //TODO programming techniques and other special abilities
