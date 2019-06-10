@@ -54,7 +54,7 @@ public class ZzpjAppApplicationTests {
 			userService.addUser(user1);
 			userService.addUser(user2);
 		} catch (Exception e) {
-			Assert.assertFalse(e instanceof UserInvalidDataException);
+			Assert.assertTrue(e instanceof UserInvalidDataException);
 		}
 	}
 
