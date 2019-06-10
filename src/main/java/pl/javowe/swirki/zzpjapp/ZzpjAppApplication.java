@@ -7,9 +7,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import pl.javowe.swirki.zzpjapp.controller.UserController;
+import pl.javowe.swirki.zzpjapp.exception.UserInvalidDataException;
 import pl.javowe.swirki.zzpjapp.model.Locations;
 import pl.javowe.swirki.zzpjapp.model.User;
 import pl.javowe.swirki.zzpjapp.repository.UserRepository;
+import pl.javowe.swirki.zzpjapp.service.UserService;
 
 @Slf4j
 //@ComponentScan({"pl.javowe.swirki.zzpjapp.repository","pl.javowe.swirki.zzpjapp.model", "pl.javowe.swirki.zzpjapp.exception", "pl.javowe.swirki.zzpjapp.documents", "pl.javowe.swirki.zzpjapp.controller"})
@@ -32,12 +34,11 @@ public class ZzpjAppApplication {
 	*/
 
 	@Bean
-	CommandLineRunner initDatabase(UserController controller) {
+	CommandLineRunner initDatabase(UserService service) {
 		return args -> {
-			controller.validateAndAddUser(new User("abc@gmail.com", 34, Locations.Poland, "Julek", "Gąska", true, "nie lubi w pupe"));
-			controller.validateAndAddUser(new User("example@gmail.com", 22, Locations.Ukraine, "Jan", "Kowalski", false, "Jan Kowalski"));
-			controller.validateAndAddUser(new User("abc@example.com", 30, Locations.Poland, "Anna", "Kowalska", false, "Anna Kowalska"));
-			controller.validateAndAddUser(new User("abc", 33, Locations.Poland, "Franek", "Pomyłka", false, "Niepoprawny e-mail"));
+				service.addUser(new User("abc@gmail.com", 34, Locations.Poland, "Julek", "Gąska", true, "Krul javowych świrków"));
+				service.addUser(new User("example@gmail.com", 22, Locations.Ukraine, "Jan", "Kowalski", false, "Jan Kowalski"));
+				service.addUser(new User("abc@example.com", 30, Locations.Poland, "Anna", "Kowalska", false, "Anna Kowalska"));
 		};
 	}
 }
