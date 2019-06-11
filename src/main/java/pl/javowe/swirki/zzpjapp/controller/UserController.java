@@ -1,7 +1,6 @@
 package pl.javowe.swirki.zzpjapp.controller;
 
 
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +10,10 @@ import pl.javowe.swirki.zzpjapp.model.User;
 import pl.javowe.swirki.zzpjapp.repository.UserRepository;
 import pl.javowe.swirki.zzpjapp.service.UserService;
 import pl.javowe.swirki.zzpjapp.service.UserServiceImpl;
-
-import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.List;
-import java.util.Set;
 
 
 @RestController
@@ -72,6 +68,4 @@ public class UserController {
         //this.repository.deleteById(id);
         this.userService.deleteUser(id);
     }
-
-
 }

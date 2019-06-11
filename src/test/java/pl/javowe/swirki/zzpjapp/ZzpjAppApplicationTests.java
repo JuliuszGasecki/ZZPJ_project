@@ -2,22 +2,18 @@ package pl.javowe.swirki.zzpjapp;
 
 import org.junit.*;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import pl.javowe.swirki.zzpjapp.controller.UserController;
 import pl.javowe.swirki.zzpjapp.exception.UserInvalidDataException;
 import pl.javowe.swirki.zzpjapp.model.Locations;
 import pl.javowe.swirki.zzpjapp.model.User;
 import pl.javowe.swirki.zzpjapp.repository.UserRepository;
 import pl.javowe.swirki.zzpjapp.service.UserService;
 import pl.javowe.swirki.zzpjapp.service.UserServiceImpl;
-
 import java.util.ArrayList;
 
 @RunWith(SpringRunner.class)
