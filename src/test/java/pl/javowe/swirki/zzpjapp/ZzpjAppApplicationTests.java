@@ -4,6 +4,7 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,7 @@ import pl.javowe.swirki.zzpjapp.repository.UserRepository;
 import pl.javowe.swirki.zzpjapp.service.UserService;
 import pl.javowe.swirki.zzpjapp.service.UserServiceImpl;
 import java.util.ArrayList;
+import lombok.Data;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -77,7 +79,7 @@ public class ZzpjAppApplicationTests {
 	@Test
 	public void userService_addUserWithInvalidAgeTest()
 	{
-		Mockito.when(userRepository.findAll()).thenReturn(new ArrayList<>() {{ add(user1); add(user2); }});
+		Mockito.when(userRepository.findAll()).thenReturn(new ArrayList<User>() {{ add(user1); add(user2); }});
 		try {
 			userService.addUser(user3);
 		} catch (Exception e) {
@@ -91,7 +93,7 @@ public class ZzpjAppApplicationTests {
 	@Test
 	public void userService_addUserWithInvalidEmailTest()
 	{
-		Mockito.when(userRepository.findAll()).thenReturn(new ArrayList<>() {{ add(user1); add(user2); }});
+		Mockito.when(userRepository.findAll()).thenReturn(new ArrayList<User>() {{ add(user1); add(user2); }});
 		try {
 			userService.addUser(user4);
 		} catch (Exception e) {
