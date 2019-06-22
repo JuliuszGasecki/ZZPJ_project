@@ -43,5 +43,14 @@ public class Thread {
 
     }
 
+    public void addPost(Post e)
+    {
+        posts.add(e);
+    }
+    public void removePost(Post post)
+    {
+        posts.remove(post);
+    }
+
 
 }
