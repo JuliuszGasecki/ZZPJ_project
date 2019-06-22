@@ -1,10 +1,13 @@
 package pl.javowe.swirki.zzpjapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import pl.javowe.swirki.zzpjapp.exception.UserInvalidDataException;
 import pl.javowe.swirki.zzpjapp.exception.UserNotFoundException;
 import pl.javowe.swirki.zzpjapp.model.User;
 import pl.javowe.swirki.zzpjapp.repository.UserRepository;
+import pl.javowe.swirki.zzpjapp.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +15,7 @@ import java.util.List;
 @RestController
 public class AdminController {
     private UserRepository repository;
+    private UserService userService;
 
     @Autowired
     public AdminController(UserRepository repository) {
@@ -22,7 +26,7 @@ public class AdminController {
     public List<User> getAllAdmins() {
         List<User> admins = new ArrayList<>();
         for (User user : repository.findAll()) {
-            if(user.isAdmin() == true) {
+            if(user.isAdmin()) {
                 admins.add(user);
             }
         }
@@ -54,10 +58,17 @@ public class AdminController {
         else throw new UserNotFoundException(id);
     }
 
+    @PostMapping("/addUser")
+    @ResponseStatus(HttpStatus.CREATED)
+    public User addUser(@RequestBody User user) throws UserInvalidDataException {
+        //return this.repository.save(user);
+        return this.userService.save(user);
+    }
+
     @DeleteMapping("/deleteUser/{id}")
     public void deleteUser(@PathVariable Long id) throws UserNotFoundException {
         if(repository.findById(id).isPresent()) {
-            repository.delete(repository.getOne(id));
+            userService.deleteUser(id);
         }
         else throw new UserNotFoundException(id);
     }
