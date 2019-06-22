@@ -10,8 +10,11 @@ import pl.javowe.swirki.zzpjapp.controller.UserController;
 import pl.javowe.swirki.zzpjapp.exception.UserInvalidDataException;
 import pl.javowe.swirki.zzpjapp.model.Locations;
 import pl.javowe.swirki.zzpjapp.model.User;
+import pl.javowe.swirki.zzpjapp.model.forumModel.Thread;
 import pl.javowe.swirki.zzpjapp.repository.UserRepository;
 import pl.javowe.swirki.zzpjapp.service.UserService;
+import pl.javowe.swirki.zzpjapp.service.forumservices.ForumService;
+import pl.javowe.swirki.zzpjapp.service.forumservices.ThreadForumService;
 
 @Slf4j
 //@ComponentScan({"pl.javowe.swirki.zzpjapp.repository","pl.javowe.swirki.zzpjapp.model", "pl.javowe.swirki.zzpjapp.exception", "pl.javowe.swirki.zzpjapp.documents", "pl.javowe.swirki.zzpjapp.controller"})
@@ -39,6 +42,13 @@ public class ZzpjAppApplication {
 				service.addUser(new User("abc@gmail.com", 34, Locations.Poland, "Julek", "Gąska", true, "Krul javowych świrków"));
 				service.addUser(new User("example@gmail.com", 22, Locations.Ukraine, "Jan", "Kowalski", false, "Jan Kowalski"));
 				service.addUser(new User("abc@example.com", 30, Locations.Poland, "Anna", "Kowalska", false, "Anna Kowalska"));
+		};
+	}
+	@Bean
+	CommandLineRunner initDatabase2(ThreadForumService forumService,UserService userService) {
+		return e -> {
+			forumService.add(new Thread(userService.getUser(1L),"Why java is so bad ","Why?"));
+
 		};
 	}
 }

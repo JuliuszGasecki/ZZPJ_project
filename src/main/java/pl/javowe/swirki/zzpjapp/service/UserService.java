@@ -7,10 +7,10 @@ import pl.javowe.swirki.zzpjapp.model.User;
 import java.util.List;
 
 public interface UserService {
-    public List<User> getAllUsers();
-    public User getUser(Long userId) throws UserNotFoundException;
-    public User save(User user) throws UserInvalidDataException;
-    public void addUser(User user) throws UserInvalidDataException;
-    public void deleteUser(Long userId) throws UserNotFoundException;
-    public void updateUser(User user);
+     List<User> getAllUsers();
+     User getUser(Long userId) throws UserNotFoundException;
+     User save(User user) throws UserInvalidDataException;
+     void addUser(User user) throws UserInvalidDataException;
+     void deleteUser(Long userId) throws UserNotFoundException;
+     void updateUser(User user);
 }
