@@ -13,10 +13,11 @@ public class ImageService {
 
     public ImageService() {}
 
-    public void saveImage(byte[] data, String path) throws IOException {
-        BufferedImage bImage = ImageIO.read(new File(path));
+    public byte[] saveImageToByte(String filename) throws IOException {
+        BufferedImage bImage = ImageIO.read(new File("UsersImages/" + filename + ".jpg"));
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ImageIO.write(bImage, "jpg", bos);
-        data = bos.toByteArray();
+        byte[] data = bos.toByteArray();
+        return data;
     }
 }

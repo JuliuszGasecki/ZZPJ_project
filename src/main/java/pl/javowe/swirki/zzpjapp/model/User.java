@@ -44,8 +44,8 @@ public class User {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "avatar")
-    private byte[] loadedAvatar;
+    @Column(name = "picture", length = 10000000)
+    private byte[] loadedPicture;
 
    /* //TODO programming languages class with experience level
     private List<String> programmingLanguages;

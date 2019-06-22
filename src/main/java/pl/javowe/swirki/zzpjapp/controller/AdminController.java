@@ -18,14 +18,15 @@ public class AdminController {
     private UserService userService;
 
     @Autowired
-    public AdminController(UserRepository repository) {
+    public AdminController(UserRepository repository, UserService userService) {
         this.repository = repository;
+        this.userService = userService;
     }
 
     @GetMapping("/admins")
     public List<User> getAllAdmins() {
         List<User> admins = new ArrayList<>();
-        for (User user : repository.findAll()) {
+        for (User user : userService.getAllUsers()) {
             if(user.isAdmin()) {
                 admins.add(user);
             }
@@ -39,21 +40,21 @@ public class AdminController {
     }
 
     @PutMapping("/setAdmin/{id}")
-    public User setAdmin(@PathVariable Long id) throws UserNotFoundException {
+    public User setAdmin(@PathVariable Long id) throws UserNotFoundException, UserInvalidDataException {
         if(repository.findById(id).isPresent()) {
             repository.findById(id).get().setAdmin(true);
-            repository.save(repository.findById(id).get());
-            return repository.getOne(id);
+            userService.save(repository.findById(id).get());
+            return userService.getUser(id);
         }
         else throw new UserNotFoundException(id);
     }
 
     @PutMapping("/removeAdmin/{id}")
-    public User removeAdmin(@PathVariable Long id) throws UserNotFoundException {
+    public User removeAdmin(@PathVariable Long id) throws UserNotFoundException, UserInvalidDataException {
         if(repository.findById(id).isPresent()) {
             repository.findById(id).get().setAdmin(false);
-            repository.save(repository.findById(id).get());
-            return repository.getOne(id);
+            userService.save(repository.findById(id).get());
+            return userService.getUser(id);
         }
         else throw new UserNotFoundException(id);
     }
@@ -66,6 +67,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/deleteUser/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void deleteUser(@PathVariable Long id) throws UserNotFoundException {
         if(repository.findById(id).isPresent()) {
             userService.deleteUser(id);
