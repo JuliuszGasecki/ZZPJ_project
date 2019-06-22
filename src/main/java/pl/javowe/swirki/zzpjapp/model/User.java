@@ -92,4 +92,12 @@ public class User {
         this.isAdmin = isAdmin;
         this.description = description;
     }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.isAdmin = admin;
+    }
 }
