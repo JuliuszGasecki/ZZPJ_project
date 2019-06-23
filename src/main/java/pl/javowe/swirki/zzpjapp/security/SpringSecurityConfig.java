@@ -6,6 +6,7 @@ import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,30 +30,38 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+       /*
         http
                 .authorizeRequests()
                 .mvcMatchers("/").permitAll()
                 .antMatchers("/css/**", "/js/**", "fonts/**").permitAll()
                 .antMatchers(HttpMethod.DELETE,"/users/*").hasRole("ADMIN")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin().defaultSuccessUrl("/users")
-                .and()
-                .httpBasic()
-                .and()
-                .sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(true).sessionRegistry(sessionRegistry());
+                .antMatchers("/hello").hasRole("USER")
+                .antMatchers("/admins", "/removeAdmin/*", "/admin/*", "/setAdmin/*", "/deleteUser/*").hasRole("ADMIN")
+        */
+        //For not logged in
+        http.authorizeRequests().antMatchers("/", "/login").permitAll().antMatchers("/css/**", "/js/**", "fonts/**").permitAll();
+        //For Admins Only
+        http.authorizeRequests().antMatchers("/admins", "/removeAdmin/*", "/admin/*", "/setAdmin/*", "/deleteUser/*").hasAnyRole("ADMIN", "USER");
+
+        http.formLogin().defaultSuccessUrl("/users");
+
     }
+
 
     @Bean
     public SessionRegistry sessionRegistry() {
         SessionRegistry sessionRegistry = new SessionRegistryImpl();
         return sessionRegistry;
     }
-    
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
-        auth.userDetailsService(myUserDetails).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(myUserDetails).
+        passwordEncoder(passwordEncoder()).and()
+        .authenticationProvider(authenticationProvider());
     }
 
     @Bean
@@ -66,7 +75,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         return new ServletListenerRegistrationBean(new HttpSessionEventPublisher());
     }
 
-    /*
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(myUserDetails);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+/*
     @Bean
     @Override
     public UserDetailsService userDetailsService() {

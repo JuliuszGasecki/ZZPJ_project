@@ -37,13 +37,13 @@ public class ZzpjAppApplication {
 	@Bean
 	CommandLineRunner initDatabase(UserService service) {
 		return args -> {
-			controller.validateAndAddUser(new User("A", "admin1", "abc@gmail.com", 34, Locations.Poland, "Julek", "Gąska", true, "nie lubi w pupe"));
-			controller.validateAndAddUser(new User("B","admin1", "example@gmail.com", 22, Locations.Ukraine, "Jan", "Kowalski", false, "Jan Kowalski"));
-			controller.validateAndAddUser(new User("C","admin1", "abc@example.com", 30, Locations.Poland, "Anna", "Kowalska", false, "Anna Kowalska"));
-			controller.validateAndAddUser(new User("D","admin1", "abc", 33, Locations.Poland, "Franek", "Pomyłka", false, "Niepoprawny e-mail"));
-				service.addUser(new User("abc@gmail.com", 34, Locations.Poland, "Julek", "Gąska", true, "Krul javowych świrków"));
-				service.addUser(new User("example@gmail.com", 22, Locations.Ukraine, "Jan", "Kowalski", false, "Jan Kowalski"));
-				service.addUser(new User("abc@example.com", 30, Locations.Poland, "Anna", "Kowalska", false, "Anna Kowalska"));
+			service.addUser(new User("A", "admin1", "abc@gmail.com", 34, Locations.Poland, "Julek", "Gąska", true, "nie lubi w pupe"));
+			service.addUser(new User("B","admin1", "example@gmail.com", 22, Locations.Ukraine, "Jan", "Kowalski", false, "Jan Kowalski"));
+			service.addUser(new User("C","admin1", "abc@example.com", 30, Locations.Poland, "Anna", "Kowalska", false, "Anna Kowalska"));
+			//service.addUser(new User("D","admin1", "abc", 33, Locations.Poland, "Franek", "Pomyłka", false, "Niepoprawny e-mail"));
+            service.addUser(new User("Ziutek", "admin1","abc@gmail.com", 34, Locations.Poland, "Julek", "Gąska", true, "Krul javowych świrków"));
+            service.addUser(new User("Ziutek2", "admin1","example@gmail.com", 22, Locations.Ukraine, "Jan", "Kowalski", false, "Jan Kowalski"));
+            service.addUser(new User("Ziutek3", "admin1","abc@example.com", 30, Locations.Poland, "Anna", "Kowalska", false, "Anna Kowalska"));
 		};
 	}
 }
