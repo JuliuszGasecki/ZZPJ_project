@@ -1,6 +1,7 @@
 package pl.javowe.swirki.zzpjapp.model.forumModel;
 
 import lombok.Data;
+import pl.javowe.swirki.zzpjapp.exception.ThreadNotContainingPost;
 import pl.javowe.swirki.zzpjapp.model.User;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ import java.util.List;
 public class Thread {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) //primary key generated with TopLink
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @OneToOne
@@ -28,10 +29,13 @@ public class Thread {
 
     private boolean isClosed = false;
 
-    @OneToMany(targetEntity=Post.class, fetch=FetchType.EAGER)
+
+    @OneToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     private List<Post> posts = new ArrayList<>();
 
     private int userRating = 0;
+
+
 
     public Thread(User author, String title, String description) {
         this.author = author;
@@ -39,17 +43,23 @@ public class Thread {
         this.description = description;
         this.creationDate = Calendar.getInstance().getTime();
     }
-    public Thread(){
 
+    public Thread() {
     }
 
-    public void addPost(Post e)
-    {
+    public void addPost(Post e) {
+
         posts.add(e);
+        e.setThread(this);
+
     }
-    public void removePost(Post post)
-    {
+
+    public void removePost(Post post) {
         posts.remove(post);
+    }
+
+    public Post getPostByID(long id) throws ThreadNotContainingPost {
+        return posts.stream().filter(e -> e.getId() == (id)).findFirst().orElseThrow(() -> new ThreadNotContainingPost(this, id));
     }
 
 

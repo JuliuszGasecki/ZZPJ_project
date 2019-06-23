@@ -7,12 +7,15 @@ import pl.javowe.swirki.zzpjapp.exception.ThreadNotContainingPost;
 import pl.javowe.swirki.zzpjapp.exception.ThreadNotFoundException;
 import pl.javowe.swirki.zzpjapp.exception.UserNotFoundException;
 import pl.javowe.swirki.zzpjapp.model.forumModel.Post;
+import pl.javowe.swirki.zzpjapp.model.forumModel.PostCreationRequest;
 import pl.javowe.swirki.zzpjapp.model.forumModel.Thread;
+import pl.javowe.swirki.zzpjapp.model.forumModel.ThreadCreateRequest;
 import pl.javowe.swirki.zzpjapp.repository.UserRepository;
 import pl.javowe.swirki.zzpjapp.repository.forumrepositories.ThreadRepository;
 import pl.javowe.swirki.zzpjapp.service.UserService;
 import pl.javowe.swirki.zzpjapp.service.UserServiceImpl;
 import pl.javowe.swirki.zzpjapp.service.forumservices.ThreadForumService;
+
 import java.util.List;
 
 @RestController
@@ -27,40 +30,46 @@ public class ForumController {
         this.threadForumService = new ThreadForumService(repository);
         this.userService = new UserServiceImpl(userRepository);
     }
+
     @GetMapping("/threads")
-    public List<Thread> getAllThreads()
-    {
+    public List<Thread> getAllThreads() {
         return threadForumService.getAll();
     }
+
     @GetMapping("/threads/{id}")
     public Thread getThread(@PathVariable long id) throws ThreadNotFoundException {
-            return threadForumService.getById(id) ;
+        return threadForumService.getById(id);
     }
 
     @PostMapping("/threads")
-    public  void addThread(@RequestBody Thread t) throws UserNotFoundException {
+    public void addThread( @RequestBody ThreadCreateRequest t) throws UserNotFoundException {
 
-           if( userService.getUser(t.getAuthor().getId()) != null) //this sucks
-               threadForumService.add(t);
+        if (userService.getUser(t.getUserID()) != null) //this sucks
+            threadForumService.add(new Thread(userService.getUser(t.getUserID()),t.getTile(),t.getDescription()));
 
     }
+
     @DeleteMapping("/threads/{id}")
     public void removeThread(@PathVariable long id) throws ThreadNotFoundException {
 
-            threadForumService.remove(threadForumService.getById(id));
+        threadForumService.remove(threadForumService.getById(id));
     }
 
-    @PostMapping("/posts/{id}")
-    public void addPostToThread(@PathVariable long id ,@RequestBody Post post) throws UserNotFoundException, ThreadNotFoundException, ThreadAlreadyContainPost {
+    @PostMapping("/posts")
+    public void addPostToThread(@RequestBody PostCreationRequest post) throws UserNotFoundException, ThreadNotFoundException, ThreadAlreadyContainPost {
 
-        if(userService.getUser(post.getId())!= null);//this also
-             threadForumService.addPostToThread(getThread(id),post);
+        if (userService.getUser(post.getUserID()) != null) ;//this also
+        threadForumService.addPostToThread(getThread(post.getThreadID()), new Post(userService.getUser(post.getUserID()),post.getBody()));
+        threadForumService.getPosts(getThread(post.getThreadID()));
+        post =post;
     }
-    @DeleteMapping("/posts/{threadId}")
-    public void removePostFromThread(@PathVariable long threadID,@RequestBody Post postID) throws ThreadNotFoundException, ThreadNotContainingPost {
-        threadForumService.removePostFromThread(threadID,postID);
+
+    @DeleteMapping("/posts/{threadID}/{postID}")
+    public void removePostFromThread(@PathVariable long threadID, @PathVariable long postID) throws ThreadNotFoundException, ThreadNotContainingPost {
+        threadForumService.removePostFromThread(threadID, postID);
 
     }
+
     @GetMapping("posts/{id}")
     public List<Post> getAllPostsForThread(@PathVariable long id) throws ThreadNotFoundException {
         return threadForumService.getPosts(getThread(id));

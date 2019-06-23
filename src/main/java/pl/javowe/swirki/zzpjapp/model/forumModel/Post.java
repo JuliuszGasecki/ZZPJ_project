@@ -14,18 +14,19 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) //primary key generated with TopLink
-    private Long id;
+    private long id;
 
-    @OneToOne
+    @ManyToOne
     private User author;
 
     private String body;
 
+    @ManyToOne
+    private Thread thread;
+
     private int userRating = 0;
 
     private Date creationDate;
-
-    private ArrayList<Post> anserws;
 
     public Post(User author, String body) {
         this.author = author;
@@ -33,9 +34,10 @@ public class Post {
         this.creationDate = Calendar.getInstance().getTime();
     }
 
-    public Post() {
+    public Post(Post e) {
+        this.author = e.author;
+        this.body = e.body;
+        this.creationDate = e.creationDate;
+
     }
-
-
-
 }

@@ -52,7 +52,10 @@ public class ZzpjAppApplication {
 			Thread thread = new Thread(userService.getUser(1L),"Why java is so bad ","Why?");
 			forumService.add(thread);
 			try {
-				forumService.addPostToThread(thread,new Post(userService.getUser(1L),"Dont know "));
+				forumService.addPostToThread(thread,new Post(userService.getUser(1L),"Dont know 1"));
+				forumService.addPostToThread(thread,new Post(userService.getUser(1L),"Dont know 2"));
+				forumService.addPostToThread(thread,new Post(userService.getUser(1L),"Dont know 2"));
+				System.out.println("CZY DZIAŁA? " +  forumService.getPosts(thread).size());
 			} catch (ThreadAlreadyContainPost threadAlreadyContainPost) {
 				threadAlreadyContainPost.printStackTrace();
 			}
