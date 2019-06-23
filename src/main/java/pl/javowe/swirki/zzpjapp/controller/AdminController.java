@@ -6,57 +6,39 @@ import org.springframework.web.bind.annotation.*;
 import pl.javowe.swirki.zzpjapp.exception.UserInvalidDataException;
 import pl.javowe.swirki.zzpjapp.exception.UserNotFoundException;
 import pl.javowe.swirki.zzpjapp.model.User;
-import pl.javowe.swirki.zzpjapp.repository.UserRepository;
 import pl.javowe.swirki.zzpjapp.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class AdminController {
-    private UserRepository repository;
     private UserService userService;
 
     @Autowired
-    public AdminController(UserRepository repository, UserService userService) {
-        this.repository = repository;
+    public AdminController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/admins")
     public List<User> getAllAdmins() {
-        List<User> admins = new ArrayList<>();
-        for (User user : userService.getAllUsers()) {
-            if(user.isAdmin()) {
-                admins.add(user);
-            }
-        }
-        return admins;
+        return userService.getAllAdmins();
     }
 
     @GetMapping("/admin/{id}")
     public User getAdmin(@PathVariable Long id) throws UserNotFoundException {
-        return repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        return userService.getAdmin(id);
     }
 
     @PutMapping("/setAdmin/{id}")
     public User setAdmin(@PathVariable Long id) throws UserNotFoundException, UserInvalidDataException {
-        if(repository.findById(id).isPresent()) {
-            repository.findById(id).get().setAdmin(true);
-            userService.save(repository.findById(id).get());
-            return userService.getUser(id);
-        }
-        else throw new UserNotFoundException(id);
+        userService.setAdmin(id);
+        return userService.getUser(id);
     }
 
     @PutMapping("/removeAdmin/{id}")
     public User removeAdmin(@PathVariable Long id) throws UserNotFoundException, UserInvalidDataException {
-        if(repository.findById(id).isPresent()) {
-            repository.findById(id).get().setAdmin(false);
-            userService.save(repository.findById(id).get());
-            return userService.getUser(id);
-        }
-        else throw new UserNotFoundException(id);
+        userService.removeAdmin(id);
+        return userService.getUser(id);
     }
 
     @PostMapping("/addUser")
@@ -69,9 +51,6 @@ public class AdminController {
     @DeleteMapping("/deleteUser/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void deleteUser(@PathVariable Long id) throws UserNotFoundException {
-        if(repository.findById(id).isPresent()) {
-            userService.deleteUser(id);
-        }
-        else throw new UserNotFoundException(id);
+        userService.deleteUser(id);
     }
 }

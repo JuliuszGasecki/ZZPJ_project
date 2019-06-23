@@ -8,7 +8,7 @@ import pl.javowe.swirki.zzpjapp.exception.UserInvalidDataException;
 import pl.javowe.swirki.zzpjapp.exception.UserNotFoundException;
 import pl.javowe.swirki.zzpjapp.model.User;
 import pl.javowe.swirki.zzpjapp.repository.UserRepository;
-import pl.javowe.swirki.zzpjapp.service.ImageService;
+import pl.javowe.swirki.zzpjapp.service.ImageServiceImpl;
 import pl.javowe.swirki.zzpjapp.service.UserService;
 import pl.javowe.swirki.zzpjapp.service.UserServiceImpl;
 
@@ -25,15 +25,15 @@ public class UserController {
     private UserService userService;
     private ValidatorFactory factory;
     private Validator validator;
-    private ImageService imageService;
+    private ImageServiceImpl imageServiceImpl;
 
     @Autowired
-    public UserController(UserRepository repository, ImageService imageService){
+    public UserController(UserRepository repository, ImageServiceImpl imageServiceImpl){
         this.repository = repository;
         userService = new UserServiceImpl(repository);
         factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
-        this.imageService = imageService;
+        this.imageServiceImpl = imageServiceImpl;
     }
     //Root <- access to all records from repository
 
@@ -78,7 +78,7 @@ public class UserController {
 
     @PutMapping("/user/{id}/addImage/{filename}")
     public byte[] addImageForUser(@PathVariable Long id, @PathVariable("filename") String filename) throws IOException, UserNotFoundException, UserInvalidDataException {
-        this.userService.getUser(id).setLoadedPicture(imageService.saveImageToByte(filename));
+        this.userService.getUser(id).setLoadedPicture(imageServiceImpl.saveImageToByte(filename));
         this.userService.save(this.userService.getUser(id));
         return getImageForUser(id);
     }

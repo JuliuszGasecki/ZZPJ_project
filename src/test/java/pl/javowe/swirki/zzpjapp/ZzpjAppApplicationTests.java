@@ -77,7 +77,7 @@ public class ZzpjAppApplicationTests {
 	@Test
 	public void userService_addUserWithInvalidAgeTest()
 	{
-		Mockito.when(userRepository.findAll()).thenReturn(new ArrayList<>() {{ add(user1); add(user2); }});
+		Mockito.when(userRepository.findAll()).thenReturn(new ArrayList<User>() {{ add(user1); add(user2); }});
 		try {
 			userService.addUser(user3);
 		} catch (Exception e) {
@@ -91,7 +91,7 @@ public class ZzpjAppApplicationTests {
 	@Test
 	public void userService_addUserWithInvalidEmailTest()
 	{
-		Mockito.when(userRepository.findAll()).thenReturn(new ArrayList<>() {{ add(user1); add(user2); }});
+		Mockito.when(userRepository.findAll()).thenReturn(new ArrayList<User>() {{ add(user1); add(user2); }});
 		try {
 			userService.addUser(user4);
 		} catch (Exception e) {
@@ -104,5 +104,17 @@ public class ZzpjAppApplicationTests {
 
 	@Test
 	public void contextLoads() {
+	}
+
+	@Test
+	public void userRepository_getAdminTest() {
+		Mockito.when(userRepository.getOne(1L)).thenReturn(user1);
+		Boolean actualIsAdmin = userRepository.getOne(1L).isAdmin();
+		Assert.assertEquals(true, actualIsAdmin);
+		Mockito.verify(userRepository).getOne(1L);
+	}
+
+	@Test
+	public void userService_setAdminTest() {
 	}
 }
