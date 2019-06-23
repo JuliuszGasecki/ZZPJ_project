@@ -12,7 +12,7 @@ import java.util.Locale;
 
 @Data //provides getters, setters, HashCodeAndEquals, RequiredArgsConstructor, to string
 @Entity // <- JPA entity
-//@Table("user") //<- JPA table
+@Table(appliesTo = "user")
 public class User {
 
     @Id

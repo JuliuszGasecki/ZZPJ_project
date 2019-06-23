@@ -12,30 +12,35 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "thread")
 public class Thread {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private long id;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "author")
     private User author;
 
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "creationdate")
     private Date creationDate;
 
+    @Column(name = "isclosed")
     private boolean isClosed = false;
 
-
-    @OneToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
 
+    @Column (name = "userrating")
     private int userRating = 0;
-
-
 
     public Thread(User author, String title, String description) {
         this.author = author;

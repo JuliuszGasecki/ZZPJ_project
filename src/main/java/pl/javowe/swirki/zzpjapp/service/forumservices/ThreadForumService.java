@@ -1,6 +1,7 @@
 package pl.javowe.swirki.zzpjapp.service.forumservices;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.javowe.swirki.zzpjapp.exception.ThreadAlreadyContainPost;
 import pl.javowe.swirki.zzpjapp.exception.ThreadNotContainingPost;
 import pl.javowe.swirki.zzpjapp.exception.ThreadNotFoundException;
@@ -12,6 +13,7 @@ import java.util.List;
 
 
 @Service
+@Transactional
 public class ThreadForumService implements ForumService<Thread> {
 
     private ThreadRepository repository;
