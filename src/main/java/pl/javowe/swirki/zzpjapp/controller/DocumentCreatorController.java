@@ -68,9 +68,10 @@ public class DocumentCreatorController {
     }
 
     @GetMapping("/createStatisticsForum") //<- method for http Get request
-    public JSONObject createDocumentForum(){
-        documentStrategy.documentCreator = new ForumStatistics();
-        return new JSONObject();
+    public String createDocumentForum(){
+        documentStrategy.documentCreator = new ForumStatistics(userService.getAllUsers(), forumService);
+        JSONObject document = documentStrategy.documentCreator.create();
+        return document.toString();
     }
 
 }
