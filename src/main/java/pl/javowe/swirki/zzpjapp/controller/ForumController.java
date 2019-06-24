@@ -3,9 +3,7 @@ package pl.javowe.swirki.zzpjapp.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import pl.javowe.swirki.zzpjapp.exception.PostNotFoundException;
-import pl.javowe.swirki.zzpjapp.exception.ThreadNotFoundException;
-import pl.javowe.swirki.zzpjapp.exception.UserNotFoundException;
+import pl.javowe.swirki.zzpjapp.exception.*;
 import pl.javowe.swirki.zzpjapp.model.forumModel.*;
 import pl.javowe.swirki.zzpjapp.model.forumModel.Thread;
 import pl.javowe.swirki.zzpjapp.repository.UserRepository;
@@ -41,7 +39,7 @@ public class ForumController {
 
     @PostMapping("forum/thread")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addThread( @RequestBody ThreadCreationRequest t) throws UserNotFoundException {
+    public void addThread( @RequestBody ThreadCreationRequest t) throws UserNotFoundException, ThreadInvalidDataException {
 
         if (userService.getUser(t.getUserID()) != null)
             forumService.add(new Thread(userService.getUser(t.getUserID()),t.getTile(),t.getDescription()));
@@ -56,7 +54,7 @@ public class ForumController {
 
     @PostMapping("forum/post")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addPostToThread(@RequestBody PostCreationRequest creationRequest) throws UserNotFoundException, ThreadNotFoundException {
+    public void addPostToThread(@RequestBody PostCreationRequest creationRequest) throws UserNotFoundException, ThreadNotFoundException, PostInvalidDataException {
 
         if (userService.getUser(creationRequest.getUserID()) != null)
              forumService.addPostToThread(getThread(creationRequest.getThreadID()), new Post(userService.getUser(creationRequest.getUserID()),creationRequest.getBody()));
