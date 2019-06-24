@@ -5,23 +5,26 @@ import org.springframework.stereotype.Service;
 import pl.javowe.swirki.zzpjapp.exception.PostNotFoundException;
 import pl.javowe.swirki.zzpjapp.exception.ThreadNotFoundException;
 import pl.javowe.swirki.zzpjapp.model.forumModel.Post;
+import pl.javowe.swirki.zzpjapp.model.forumModel.PostFilterResponse;
 import pl.javowe.swirki.zzpjapp.model.forumModel.Thread;
 import pl.javowe.swirki.zzpjapp.repository.forumrepositories.PostRepository;
 import pl.javowe.swirki.zzpjapp.repository.forumrepositories.ThreadRepository;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 @Service
-public class ThreadForumService implements ForumService<Thread> {
+public class ForumServiceImpl implements ForumService<Thread> {
 
     private ThreadRepository repository;
 
     @Autowired
     private PostRepository postRepository;
 
-    public ThreadForumService(ThreadRepository repository, PostRepository postRepository) {
+    public ForumServiceImpl(ThreadRepository repository, PostRepository postRepository) {
         this.repository = repository;
         this.postRepository = postRepository;
     }
@@ -78,4 +81,11 @@ public class ThreadForumService implements ForumService<Thread> {
     }
 
 
+    public PostFilterResponse getAllPostsContainingWord(String word) {
+        List<Post> result = postRepository.findAll().stream()
+                .filter(e -> Arrays.asList(e.getBody().toLowerCase().split(" ")).
+                        contains(word.toLowerCase())).collect(Collectors.toList());
+
+            return new PostFilterResponse(result);
+    }
 }

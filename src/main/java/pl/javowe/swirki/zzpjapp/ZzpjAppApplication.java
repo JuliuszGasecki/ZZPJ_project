@@ -9,7 +9,7 @@ import pl.javowe.swirki.zzpjapp.model.Locations;
 import pl.javowe.swirki.zzpjapp.model.User;
 import pl.javowe.swirki.zzpjapp.model.forumModel.Thread;
 import pl.javowe.swirki.zzpjapp.service.UserService;
-import pl.javowe.swirki.zzpjapp.service.forumservices.ThreadForumService;
+import pl.javowe.swirki.zzpjapp.service.forumservices.ForumServiceImpl;
 
 @Slf4j
 //@ComponentScan({"pl.javowe.swirki.zzpjapp.repository","pl.javowe.swirki.zzpjapp.model", "pl.javowe.swirki.zzpjapp.exception", "pl.javowe.swirki.zzpjapp.documents", "pl.javowe.swirki.zzpjapp.controller"})
@@ -40,7 +40,7 @@ public class ZzpjAppApplication {
 		};
 	}
 	@Bean
-	CommandLineRunner initDatabase2(ThreadForumService forumService,UserService userService) {
+	CommandLineRunner initDatabase2(ForumServiceImpl forumService, UserService userService) {
 		return e -> {
 			Thread thread = new Thread(userService.getUser(1L),"Why java is so bad ","Why?");
 			forumService.add(thread);

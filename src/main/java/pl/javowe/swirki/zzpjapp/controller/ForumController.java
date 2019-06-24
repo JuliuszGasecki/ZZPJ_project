@@ -5,71 +5,76 @@ import org.springframework.web.bind.annotation.*;
 import pl.javowe.swirki.zzpjapp.exception.PostNotFoundException;
 import pl.javowe.swirki.zzpjapp.exception.ThreadNotFoundException;
 import pl.javowe.swirki.zzpjapp.exception.UserNotFoundException;
-import pl.javowe.swirki.zzpjapp.model.forumModel.Post;
-import pl.javowe.swirki.zzpjapp.model.forumModel.PostCreationRequest;
+import pl.javowe.swirki.zzpjapp.model.forumModel.*;
 import pl.javowe.swirki.zzpjapp.model.forumModel.Thread;
-import pl.javowe.swirki.zzpjapp.model.forumModel.ThreadCreateRequest;
 import pl.javowe.swirki.zzpjapp.repository.UserRepository;
 import pl.javowe.swirki.zzpjapp.repository.forumrepositories.PostRepository;
 import pl.javowe.swirki.zzpjapp.repository.forumrepositories.ThreadRepository;
 import pl.javowe.swirki.zzpjapp.service.UserService;
 import pl.javowe.swirki.zzpjapp.service.UserServiceImpl;
-import pl.javowe.swirki.zzpjapp.service.forumservices.ThreadForumService;
+import pl.javowe.swirki.zzpjapp.service.forumservices.ForumServiceImpl;
 
 import java.util.List;
 
 @RestController
 public class ForumController {
 
-    private ThreadForumService threadForumService;
+    private ForumServiceImpl forumService;
     private UserService userService;
 
     @Autowired
     public ForumController(ThreadRepository repository, UserRepository userRepository, PostRepository postRepository) {
-        this.threadForumService = new ThreadForumService(repository,postRepository);
+        this.forumService = new ForumServiceImpl(repository,postRepository);
         this.userService = new UserServiceImpl(userRepository);
     }
 
-    @GetMapping("/thread")
+    @GetMapping("forum/thread")
     public List<Thread> getAllThreads() {
-        return threadForumService.getAll();
+        return forumService.getAll();
     }
 
-    @GetMapping("/thread/{id}")
+    @GetMapping("forum/thread/{id}")
     public Thread getThread(@PathVariable long id) throws ThreadNotFoundException {
-        return threadForumService.getById(id);
+        return forumService.getById(id);
     }
 
-    @PostMapping("/thread")
-    public void addThread( @RequestBody ThreadCreateRequest t) throws UserNotFoundException {
+    @PostMapping("forum/thread")
+    public void addThread( @RequestBody ThreadCreationRequest t) throws UserNotFoundException {
 
         if (userService.getUser(t.getUserID()) != null)
-            threadForumService.add(new Thread(userService.getUser(t.getUserID()),t.getTile(),t.getDescription()));
+            forumService.add(new Thread(userService.getUser(t.getUserID()),t.getTile(),t.getDescription()));
 
     }
 
-    @DeleteMapping("/thread/{id}")
+    @DeleteMapping("forum/thread/{id}")
     public void removeThread(@PathVariable long id) throws ThreadNotFoundException {
 
-        threadForumService.remove(threadForumService.getById(id));
+        forumService.remove(forumService.getById(id));
     }
 
-    @PostMapping("/post")
+    @PostMapping("forum/post")
     public void addPostToThread(@RequestBody PostCreationRequest creationRequest) throws UserNotFoundException, ThreadNotFoundException {
 
         if (userService.getUser(creationRequest.getUserID()) != null)
-             threadForumService.addPostToThread(getThread(creationRequest.getThreadID()), new Post(userService.getUser(creationRequest.getUserID()),creationRequest.getBody()));
+             forumService.addPostToThread(getThread(creationRequest.getThreadID()), new Post(userService.getUser(creationRequest.getUserID()),creationRequest.getBody()));
     }
 
-    @DeleteMapping("/posts/{postID}")
+    @DeleteMapping("forum/post/{postID}")
     public void removePostFromThread(@PathVariable long postID) throws PostNotFoundException {
 
-            threadForumService.removePostFromThread(postID);
+            forumService.removePostFromThread(postID);
     }
 
-    @GetMapping("posts/{id}")
+    @GetMapping("forum/post/{id}")
     public List<Post> getAllPostsForThread(@PathVariable long id) throws ThreadNotFoundException {
 
-          return threadForumService.getPosts(getThread(id));
+          return forumService.getPosts(getThread(id));
     }
+
+    @GetMapping("forum/post/filter/{word}")
+    public PostFilterResponse getAllPostsWithWord(@PathVariable String word){
+
+          return forumService.getAllPostsContainingWord(word);
+    }
+   
 }

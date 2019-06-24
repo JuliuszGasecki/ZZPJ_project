@@ -1,12 +1,10 @@
 package pl.javowe.swirki.zzpjapp.model.forumModel;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Data;
-import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import pl.javowe.swirki.zzpjapp.model.User;
-
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -16,7 +14,7 @@ import java.util.Date;
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) //primary key generated with TopLink
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private long id;
 

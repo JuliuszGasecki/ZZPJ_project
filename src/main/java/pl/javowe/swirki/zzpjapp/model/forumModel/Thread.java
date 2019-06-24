@@ -2,7 +2,6 @@ package pl.javowe.swirki.zzpjapp.model.forumModel;
 
 import lombok.Data;
 import pl.javowe.swirki.zzpjapp.model.User;
-
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
