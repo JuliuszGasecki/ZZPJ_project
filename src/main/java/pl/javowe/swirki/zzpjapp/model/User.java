@@ -2,6 +2,7 @@ package pl.javowe.swirki.zzpjapp.model;
 
 import lombok.Data;
 import org.hibernate.annotations.Table;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,7 +13,7 @@ import java.util.Locale;
 
 @Data //provides getters, setters, HashCodeAndEquals, RequiredArgsConstructor, to string
 @Entity // <- JPA entity
-//@Table("user") //<- JPA table
+@Table(appliesTo = "user")
 public class User {
 
     @Id
@@ -20,12 +21,18 @@ public class User {
     @Column(name = "id", nullable =  false)
     private Long id;
 
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
+
+    @Column(name = "password", nullable = false, length = 100)
+    private String password;
+
     @Column(name = "emailAddress", nullable = false)
     @Email
     private String emailAdress;
 
     @Column(name = "age", nullable =  false)
-    @Min(0)
+    @Min(1)
     @Max(100)
     private int age;
 
@@ -76,7 +83,10 @@ public class User {
         this.workExperience = workExperience;
     }*/
 
-    public User(String emailAdress, int age, Locations location, String firstName, String lastName, boolean isAdmin, String description) {
+    public User(String username, String password, String emailAdress, int age, Locations location, String firstName, String lastName, boolean isAdmin, String description) {
+        this.username= username;
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        this.password = bCryptPasswordEncoder.encode(password);
         this.emailAdress = emailAdress;
         this.age = age;
         this.location = location;
