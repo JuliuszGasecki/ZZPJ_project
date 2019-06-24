@@ -1,6 +1,7 @@
 package pl.javowe.swirki.zzpjapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.javowe.swirki.zzpjapp.exception.PostNotFoundException;
 import pl.javowe.swirki.zzpjapp.exception.ThreadNotFoundException;
@@ -39,6 +40,7 @@ public class ForumController {
     }
 
     @PostMapping("forum/thread")
+    @ResponseStatus(HttpStatus.CREATED)
     public void addThread( @RequestBody ThreadCreationRequest t) throws UserNotFoundException {
 
         if (userService.getUser(t.getUserID()) != null)
@@ -53,6 +55,7 @@ public class ForumController {
     }
 
     @PostMapping("forum/post")
+    @ResponseStatus(HttpStatus.CREATED)
     public void addPostToThread(@RequestBody PostCreationRequest creationRequest) throws UserNotFoundException, ThreadNotFoundException {
 
         if (userService.getUser(creationRequest.getUserID()) != null)
@@ -60,6 +63,7 @@ public class ForumController {
     }
 
     @DeleteMapping("forum/post/{postID}")
+
     public void removePostFromThread(@PathVariable long postID) throws PostNotFoundException {
 
             forumService.removePostFromThread(postID);
@@ -88,22 +92,26 @@ public class ForumController {
     }
 
     @PutMapping("forum/post/increase-rating/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void increasePostRating(@PathVariable long id){
 
         forumService.increasePostRating(id);
     }
     @PutMapping("forum/post/decrease-rating/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void decreasePostRating(@PathVariable long id){
 
         forumService.decreasePostRating(id);
     }
 
     @PutMapping("forum/thread/increase-rating/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void increaseThreadRating(@PathVariable long id){
 
         forumService.increaseThreadRating(id);
     }
     @PutMapping("forum/thread/decrease-rating/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void decreaseThreadRating(@PathVariable long id){
 
         forumService.decreaseThreadRating(id);
