@@ -11,14 +11,26 @@ import java.io.IOException;
 public class HelloWorld {
 
     @RequestMapping("/hello")
-    public String index(){
-        CreatorCV creatorCV = new CreatorCV();
+    public String hello(){
+     /*   CreatorCV creatorCV = new CreatorCV();
         try {
             creatorCV.createCV(new User());
         } catch (IOException e) {
             System.out.println("lol");
             e.printStackTrace();
-        }
+        }*/
+        return "HelloWorld";
+    }
+
+    @RequestMapping("/")
+    public String index(){
+      /*  CreatorCV creatorCV = new CreatorCV();
+        try {
+            creatorCV.createCV(new User());
+        } catch (IOException e) {
+            System.out.println("lol");
+            e.printStackTrace();
+        }*/
         return "HelloWorld";
     }
 }
