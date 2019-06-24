@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@Transactional
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;

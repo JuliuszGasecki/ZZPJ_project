@@ -1,17 +1,27 @@
 package pl.javowe.swirki.zzpjapp.service.forumservices;
 
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.javowe.swirki.zzpjapp.exception.PostInvalidDataException;
 import pl.javowe.swirki.zzpjapp.exception.PostNotFoundException;
+import pl.javowe.swirki.zzpjapp.exception.ThreadInvalidDataException;
 import pl.javowe.swirki.zzpjapp.exception.ThreadNotFoundException;
 import pl.javowe.swirki.zzpjapp.model.forumModel.Post;
 import pl.javowe.swirki.zzpjapp.model.forumModel.PostFilterResponse;
 import pl.javowe.swirki.zzpjapp.model.forumModel.Thread;
 import pl.javowe.swirki.zzpjapp.repository.forumrepositories.PostRepository;
 import pl.javowe.swirki.zzpjapp.repository.forumrepositories.ThreadRepository;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -19,19 +29,23 @@ import java.util.stream.Collectors;
 public class ForumServiceImpl implements ForumService<Thread> {
 
     private ThreadRepository threadRepository;
+    private PostRepository postRepository;
+    private Validator validator;
+    private ValidatorFactory factory;
 
     @Autowired
-    private PostRepository postRepository;
-
     public ForumServiceImpl(ThreadRepository repository, PostRepository postRepository) {
         this.threadRepository = repository;
         this.postRepository = postRepository;
+        factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
     }
 
     @Override
     public List<Thread> getAll() {
         return threadRepository.findAll();
     }
+
 
     @Override
     public Thread getById(long id) throws ThreadNotFoundException {
@@ -43,9 +57,12 @@ public class ForumServiceImpl implements ForumService<Thread> {
     }
 
     @Override
-    public void add(Thread thread) {
+    public void add(Thread thread) throws ThreadInvalidDataException {
 
-        threadRepository.save(thread);
+        if (validateThread(thread))
+            threadRepository.save(thread);
+        else
+            throw new ThreadInvalidDataException(thread);
 
     }
 
@@ -59,11 +76,14 @@ public class ForumServiceImpl implements ForumService<Thread> {
 
     }
 
-    public void addPostToThread(Thread thread, Post post) {
-
-            post.setThread(thread);
+    public void addPostToThread(Thread thread, Post post) throws PostInvalidDataException {
+        post.setThread(thread);
+        if(validatePost(post))
+        {
             postRepository.save(post);
-
+        }
+        else
+            throw new PostInvalidDataException(post, thread);
     }
 
     public void removePostFromThread(long post) throws PostNotFoundException {
@@ -117,5 +137,19 @@ public class ForumServiceImpl implements ForumService<Thread> {
     public List<Thread> getAllThreadsWithRatingBetterThenValue(int value) {
 
         return threadRepository.findAll().stream().filter(e -> e.getUserRating() > value).collect(Collectors.toList());
+    }
+
+    private boolean validateThread(Thread thread)
+    {
+        Set<ConstraintViolation<Thread>> violations;
+        violations = validator.validate(thread);
+        return violations.size() == 0 ? true : false;
+    }
+
+    private boolean validatePost(Post post)
+    {
+        Set<ConstraintViolation<Post>> violations;
+        violations = validator.validate(post);
+        return violations.size() == 0 ? true : false;
     }
 }
