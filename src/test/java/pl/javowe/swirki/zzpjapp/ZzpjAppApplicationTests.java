@@ -115,4 +115,12 @@ public class ZzpjAppApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
+
+	@Test
+	public void userRepository_getAdminTest() {
+		/*Mockito.when(userRepository.getOne(1L)).thenReturn(user1);
+		Boolean actualIsAdmin = userRepository.getOne(1L).isAdmin();
+		Assert.assertEquals(true, actualIsAdmin);
+		Mockito.verify(userRepository).getOne(1L);*/
+	}
 }

@@ -51,6 +51,9 @@ public class User {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "picture", length = 10000000)
+    private byte[] loadedPicture;
+
    /* //TODO programming languages class with experience level
     private List<String> programmingLanguages;
     //TODO programming techniques and other special abilities
@@ -91,13 +94,5 @@ public class User {
         this.lastName = lastName;
         this.isAdmin = isAdmin;
         this.description = description;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.isAdmin = admin;
     }
 }
