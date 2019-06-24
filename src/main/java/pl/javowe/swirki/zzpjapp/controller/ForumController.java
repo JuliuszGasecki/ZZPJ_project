@@ -71,10 +71,41 @@ public class ForumController {
           return forumService.getPosts(getThread(id));
     }
 
-    @GetMapping("forum/post/filter/{word}")
+    @GetMapping("forum/post/filter-word/{word}")
     public PostFilterResponse getAllPostsWithWord(@PathVariable String word){
 
           return forumService.getAllPostsContainingWord(word);
     }
-   
+    @GetMapping("forum/post/filter-rating/{value}")
+    public PostFilterResponse getAllPostWithRatingBetterThenValue(@PathVariable int value)
+    {
+        return forumService.getAllPostWithRatingBetterThenValue(value);
+    }
+    @GetMapping("forum/thread/filter-rating/{value}")
+    public List<Thread> getAllThreadsWithRatingBetterThenValue(@PathVariable int value)
+    {
+        return forumService.getAllThreadsWithRatingBetterThenValue(value);
+    }
+
+    @PutMapping("forum/post/increase-rating/{id}")
+    public void increasePostRating(@PathVariable long id){
+
+        forumService.increasePostRating(id);
+    }
+    @PutMapping("forum/post/decrease-rating/{id}")
+    public void decreasePostRating(@PathVariable long id){
+
+        forumService.decreasePostRating(id);
+    }
+
+    @PutMapping("forum/thread/increase-rating/{id}")
+    public void increaseThreadRating(@PathVariable long id){
+
+        forumService.increaseThreadRating(id);
+    }
+    @PutMapping("forum/thread/decrease-rating/{id}")
+    public void decreaseThreadRating(@PathVariable long id){
+
+        forumService.decreaseThreadRating(id);
+    }
 }

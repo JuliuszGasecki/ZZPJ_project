@@ -10,7 +10,6 @@ import pl.javowe.swirki.zzpjapp.model.forumModel.Thread;
 import pl.javowe.swirki.zzpjapp.repository.forumrepositories.PostRepository;
 import pl.javowe.swirki.zzpjapp.repository.forumrepositories.ThreadRepository;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,26 +18,26 @@ import java.util.stream.Collectors;
 @Service
 public class ForumServiceImpl implements ForumService<Thread> {
 
-    private ThreadRepository repository;
+    private ThreadRepository threadRepository;
 
     @Autowired
     private PostRepository postRepository;
 
     public ForumServiceImpl(ThreadRepository repository, PostRepository postRepository) {
-        this.repository = repository;
+        this.threadRepository = repository;
         this.postRepository = postRepository;
     }
 
     @Override
     public List<Thread> getAll() {
-        return repository.findAll();
+        return threadRepository.findAll();
     }
 
     @Override
     public Thread getById(long id) throws ThreadNotFoundException {
 
-        if (repository.existsById(id))
-            return repository.findById(id).get();
+        if (threadRepository.existsById(id))
+            return threadRepository.findById(id).get();
         else
             throw new ThreadNotFoundException(id);
     }
@@ -46,15 +45,15 @@ public class ForumServiceImpl implements ForumService<Thread> {
     @Override
     public void add(Thread thread) {
 
-        repository.save(thread);
+        threadRepository.save(thread);
 
     }
 
     @Override
     public void remove(Thread thread) throws ThreadNotFoundException {
 
-        if (repository.existsById(thread.getId())) {
-            repository.deleteById(thread.getId());
+        if (threadRepository.existsById(thread.getId())) {
+            threadRepository.deleteById(thread.getId());
         } else
             throw new ThreadNotFoundException(thread.getId());
 
@@ -87,5 +86,36 @@ public class ForumServiceImpl implements ForumService<Thread> {
                         contains(word.toLowerCase())).collect(Collectors.toList());
 
             return new PostFilterResponse(result);
+    }
+
+    public void increasePostRating(long id) {
+
+        postRepository.getOne(id).setUserRating(postRepository.getOne(id).getUserRating() + 1);
+    }
+    public void decreasePostRating(long id) {
+
+        postRepository.getOne(id).setUserRating(postRepository.getOne(id).getUserRating() - 1);
+    }
+
+    public void increaseThreadRating(long id) {
+
+        threadRepository.getOne(id).setUserRating(threadRepository.getOne(id).getUserRating() + 1);
+    }
+
+    public void decreaseThreadRating(long id) {
+
+        threadRepository.getOne(id).setUserRating(threadRepository.getOne(id).getUserRating() - 1);
+    }
+
+    public PostFilterResponse getAllPostWithRatingBetterThenValue(int value) {
+
+        List<Post> result = postRepository.findAll().stream().filter( e -> e.getUserRating() > value).collect(Collectors.toList());
+
+        return new PostFilterResponse(result);
+    }
+
+    public List<Thread> getAllThreadsWithRatingBetterThenValue(int value) {
+
+        return threadRepository.findAll().stream().filter(e -> e.getUserRating() > value).collect(Collectors.toList());
     }
 }
