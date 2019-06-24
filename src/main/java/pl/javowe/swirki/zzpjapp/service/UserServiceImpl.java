@@ -1,5 +1,7 @@
 package pl.javowe.swirki.zzpjapp.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.javowe.swirki.zzpjapp.exception.UserInvalidDataException;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -23,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private Validator validator;
     private ValidatorFactory factory;
+    private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository)
@@ -39,8 +43,10 @@ public class UserServiceImpl implements UserService {
         {
             userRepository.save(user);
         }
-        else
+        else {
+            LOGGER.error("INVALID User Data");
             throw new UserInvalidDataException(user);
+        }
         return user;
     }
 
@@ -54,8 +60,10 @@ public class UserServiceImpl implements UserService {
         User user;
         if (userRepository.existsById(userId))
             user = userRepository.findById(userId).get();
-        else
+        else {
+            LOGGER.error("User with id: " + userId + " - NOT FOUND");
             throw new UserNotFoundException(userId);
+        }
         return user;
     }
 
@@ -63,16 +71,20 @@ public class UserServiceImpl implements UserService {
     public void addUser(User user) throws UserInvalidDataException {
         if (validateUser(user))
             userRepository.save(user);
-        else
+        else {
+            LOGGER.error("INVALID User Data");
             throw new UserInvalidDataException(user);
+        }
     }
 
     @Override
     public void deleteUser(Long userId) throws UserNotFoundException{
         if (userRepository.existsById(userId))
             userRepository.deleteById(userId);
-        else
+        else {
+            LOGGER.error("Can not delete, user with id: " + userId + " - NOT FOUND");
             throw new UserNotFoundException(userId);
+        }
     }
 
     @Override
@@ -89,7 +101,10 @@ public class UserServiceImpl implements UserService {
             userRepository.findById(userId).get().setAdmin(true);
             userRepository.save(userRepository.findById(userId).get());
         }
-        else throw new UserNotFoundException(userId);
+        else {
+            LOGGER.error("Can not set admin, user with id: " + userId + " - NOT FOUND");
+            throw new UserNotFoundException(userId);
+        }
     }
 
     @Override
@@ -98,12 +113,23 @@ public class UserServiceImpl implements UserService {
             userRepository.findById(userId).get().setAdmin(false);
             userRepository.save(userRepository.findById(userId).get());
         }
-        else throw new UserNotFoundException(userId);
+        else {
+            LOGGER.error("Can not remove admin, user with id: " + userId + " - NOT FOUND");
+            throw new UserNotFoundException(userId);
+        }
     }
 
     @Override
     public User getAdmin(Long userId) throws UserNotFoundException {
-        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+
+        User user;
+        if (userRepository.existsById(userId) && userRepository.findById(userId).get().isAdmin())
+            user = userRepository.findById(userId).get();
+        else {
+            LOGGER.error("Admin with id: " + userId + " - NOT FOUND");
+            throw new UserNotFoundException(userId);
+        }
+        return user;
     }
 
     @Override

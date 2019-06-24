@@ -1,6 +1,8 @@
 package pl.javowe.swirki.zzpjapp.controller;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,6 +32,7 @@ public class UserController{
     private ValidatorFactory factory;
     private Validator validator;
     private ImageServiceImpl imageServiceImpl;
+    private static final Logger LOGGER = LogManager.getLogger(ImageServiceImpl.class);
 
     @Autowired
     public UserController(UserRepository repository, ImageServiceImpl imageServiceImpl){
@@ -80,8 +83,18 @@ public class UserController{
 
 
     @PutMapping("/user/{id}/addImage/{filename}")
-    public byte[] addImageForUser(@PathVariable Long id, @PathVariable("filename") String filename) throws IOException, UserNotFoundException, UserInvalidDataException {
-        this.userService.getUser(id).setLoadedPicture(imageServiceImpl.saveImageToByte(filename));
+    public byte[] addImageForUser(@PathVariable Long id, @PathVariable("filename") String filename) throws UserNotFoundException, UserInvalidDataException {
+        boolean flag = false;
+        try {
+            this.userService.getUser(id).setLoadedPicture(imageServiceImpl.saveImageToByte(filename));
+            flag = true;
+        } catch (IOException e) {
+            LOGGER.error("Can not read file: " + filename);
+            e.printStackTrace();
+        }
+        if(flag) {
+            LOGGER.info("Image: " + filename + " - loaded");
+        }
         this.userService.save(this.userService.getUser(id));
         return getImageForUser(id);
     }
