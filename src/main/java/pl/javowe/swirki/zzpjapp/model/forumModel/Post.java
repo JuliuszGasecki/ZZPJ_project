@@ -26,7 +26,7 @@ public class Post {
     @Column(name = "body")
     private String body;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "thread")
     private Thread thread;
 

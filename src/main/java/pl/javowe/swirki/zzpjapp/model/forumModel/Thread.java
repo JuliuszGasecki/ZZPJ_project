@@ -21,7 +21,18 @@ public class Thread {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "author")
+    //@JoinColumn(name = "author")
+    @JoinTable(
+            name = "Thread_User",
+            joinColumns =  @JoinColumn(
+                    name = "thread_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name="user_id",
+                    referencedColumnName = "id"
+            )
+    )
     private User author;
 
     @Column(name = "title")
@@ -36,7 +47,19 @@ public class Thread {
     @Column(name = "isclosed")
     private boolean isClosed = false;
 
-    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
+    //@OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(
+            name = "Thread_Post",
+            joinColumns =  @JoinColumn(
+                    name = "thread_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name="post_id",
+                    referencedColumnName = "id"
+            )
+    )
     private List<Post> posts = new ArrayList<>();
 
     @Column (name = "userrating")
