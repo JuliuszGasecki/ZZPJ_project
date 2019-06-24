@@ -13,7 +13,7 @@ import java.util.Locale;
 
 @Data //provides getters, setters, HashCodeAndEquals, RequiredArgsConstructor, to string
 @Entity // <- JPA entity
-//@Table("user") //<- JPA table
+@Table(appliesTo = "user")
 public class User {
 
     @Id
@@ -32,7 +32,7 @@ public class User {
     private String emailAdress;
 
     @Column(name = "age", nullable =  false)
-    @Min(0)
+    @Min(1)
     @Max(100)
     private int age;
 
