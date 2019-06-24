@@ -13,4 +13,8 @@ public interface UserService {
     public void addUser(User user) throws UserInvalidDataException;
     public void deleteUser(Long userId) throws UserNotFoundException;
     public void updateUser(User user);
+    public void setAdmin(Long userId) throws UserNotFoundException;
+    public void removeAdmin(Long userId) throws UserNotFoundException;
+    public User getAdmin(Long userId) throws UserNotFoundException;
+    public List<User> getAllAdmins();
 }

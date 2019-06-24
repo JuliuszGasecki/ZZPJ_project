@@ -3,33 +3,41 @@ package pl.javowe.swirki.zzpjapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import pl.javowe.swirki.zzpjapp.exception.UserInvalidDataException;
 import pl.javowe.swirki.zzpjapp.exception.UserNotFoundException;
 import pl.javowe.swirki.zzpjapp.model.User;
 import pl.javowe.swirki.zzpjapp.repository.UserRepository;
+import pl.javowe.swirki.zzpjapp.service.ImageServiceImpl;
 import pl.javowe.swirki.zzpjapp.service.UserService;
 import pl.javowe.swirki.zzpjapp.service.UserServiceImpl;
+
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.io.IOException;
 import java.util.List;
 import lombok.Data;
 
 
 @RestController
-public class UserController {
+public class UserController{
     private UserRepository repository;
     private UserService userService;
     private ValidatorFactory factory;
     private Validator validator;
+    private ImageServiceImpl imageServiceImpl;
 
     @Autowired
-    public UserController(UserRepository repository){
+    public UserController(UserRepository repository, ImageServiceImpl imageServiceImpl){
         this.repository = repository;
         userService = new UserServiceImpl(repository);
         factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
+        this.imageServiceImpl = imageServiceImpl;
     }
     //Root <- access to all records from repository
 
@@ -68,5 +76,25 @@ public class UserController {
     void deleteUser(@PathVariable Long id) throws UserNotFoundException {
         //this.repository.deleteById(id);
         this.userService.deleteUser(id);
+    }
+
+
+    @PutMapping("/user/{id}/addImage/{filename}")
+    public byte[] addImageForUser(@PathVariable Long id, @PathVariable("filename") String filename) throws IOException, UserNotFoundException, UserInvalidDataException {
+        this.userService.getUser(id).setLoadedPicture(imageServiceImpl.saveImageToByte(filename));
+        this.userService.save(this.userService.getUser(id));
+        return getImageForUser(id);
+    }
+
+    @GetMapping("/user/{id}/getImage")
+    public byte[] getImageForUser(@PathVariable Long id) throws UserNotFoundException {
+        return this.userService.getUser(id).getLoadedPicture();
+    }
+
+    @PutMapping("user/{id}/deleteImage")
+    public void deleteImageForUser(@PathVariable Long id) throws UserNotFoundException, UserInvalidDataException {
+        byte[] empty = new byte[0];
+        this.userService.getUser(id).setLoadedPicture(empty);
+        this.userService.save(this.userService.getUser(id));
     }
 }

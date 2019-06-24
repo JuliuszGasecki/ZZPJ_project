@@ -35,14 +35,22 @@ public class ZzpjAppApplicationTests {
 	private static User user3;
 	private static User user4;
 	private static User user5;
+	private static User user6;
+	private static User user7;
+	private static User user8;
+	private static User user9;
 
 	@BeforeClass
 	public static void init_test_data() {
-		user1 = new User("test1@example.com", 1, Locations.Ukraine, "Test1", "Pierwszy", true, "Użytkownik testowy nr 1");
-		user2 = new User("test2@example.com", 2, Locations.Poland, "Test2", "Drugi", false, "Użytkownik testowy nr 2");
-		user3 = new User("test3@example.com", 1000, Locations.Poland, "Test3", "Trzeci", false, "Użytkownik testowy nr 3 - invalid");
-		user4 = new User("test4", 10, Locations.Poland, "Test4", "Czwarty", false, "Użytkownik testowy nr 4 - invalid");
-		user5 = new User("abc@example.com", 30, Locations.Poland, "Anna", "Kowalska", false, "Anna Kowalska");
+		user1 = new User("Ziutek", "admin1","test1@example.com", 1, Locations.Ukraine, "Test1", "Pierwszy", true, "Użytkownik testowy nr 1");
+		user2 = new User("Ziutek", "admin1","test2@example.com", 2, Locations.Poland, "Test2", "Drugi", false, "Użytkownik testowy nr 2");
+		user3 = new User("Ziutek", "admin1","test3@example.com", 1000, Locations.Poland, "Test3", "Trzeci", false, "Użytkownik testowy nr 3 - invalid");
+		user4 = new User("Ziutek", "admin1","test4", 10, Locations.Poland, "Test4", "Czwarty", false, "Użytkownik testowy nr 4 - invalid");
+		user5 = new User("Ziutek", "admin1","abc@example.com", 30, Locations.Poland, "Anna", "Kowalska", false, "Anna Kowalska");
+		user6 = new User("A","admin1", "test1@example.com", 1, Locations.Ukraine, "Test1", "Pierwszy", true, "Użytkownik testowy nr 1");
+		user7 = new User("B","admin1", "test2@example.com", 2, Locations.Poland, "Test2", "Drugi", false, "Użytkownik testowy nr 2");
+		user8 = new User("C","admin1", "test3@example.com", 1000, Locations.Poland, "Test3", "Trzeci", false, "Użytkownik testowy nr 3 - invalid");
+		user9 = new User("D","admin1", "test4", 10, Locations.Poland, "Test4", "Czwarty", false, "Użytkownik testowy nr 4 - invalid");
 	}
 
 	@Before
@@ -106,5 +114,13 @@ public class ZzpjAppApplicationTests {
 
 	@Test
 	public void contextLoads() {
+	}
+
+	@Test
+	public void userRepository_getAdminTest() {
+		/*Mockito.when(userRepository.getOne(1L)).thenReturn(user1);
+		Boolean actualIsAdmin = userRepository.getOne(1L).isAdmin();
+		Assert.assertEquals(true, actualIsAdmin);
+		Mockito.verify(userRepository).getOne(1L);*/
 	}
 }

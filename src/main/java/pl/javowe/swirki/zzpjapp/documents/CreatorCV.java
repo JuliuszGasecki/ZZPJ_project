@@ -9,11 +9,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class CreatorCV {
+public class CreatorCV{
 
     public static final String fileNameTemplate = "src/main/resources/static/template.docx";
 
-    public static void createCV(User user) throws IOException {
+    CreatorCV(User user){
+        this.user = user;
+    }
+    User user;
+
+    public void createCV(User user) throws IOException {
         File fileTemplate = new File(fileNameTemplate);
         XWPFDocument document= DocumentReader.readTemplateCV(fileTemplate);
         if(document != null){

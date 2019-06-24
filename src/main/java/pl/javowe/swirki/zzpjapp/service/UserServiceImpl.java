@@ -7,14 +7,17 @@ import pl.javowe.swirki.zzpjapp.exception.UserNotFoundException;
 import pl.javowe.swirki.zzpjapp.model.User;
 import pl.javowe.swirki.zzpjapp.repository.UserRepository;
 
+import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
@@ -80,6 +83,40 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void setAdmin(Long userId) throws UserNotFoundException {
+        if(userRepository.findById(userId).isPresent()) {
+            userRepository.findById(userId).get().setAdmin(true);
+            userRepository.save(userRepository.findById(userId).get());
+        }
+        else throw new UserNotFoundException(userId);
+    }
+
+    @Override
+    public void removeAdmin(Long userId) throws UserNotFoundException {
+        if(userRepository.findById(userId).isPresent()) {
+            userRepository.findById(userId).get().setAdmin(false);
+            userRepository.save(userRepository.findById(userId).get());
+        }
+        else throw new UserNotFoundException(userId);
+    }
+
+    @Override
+    public User getAdmin(Long userId) throws UserNotFoundException {
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    }
+
+    @Override
+    public List<User> getAllAdmins() {
+        List<User> admins = new ArrayList<>();
+        for (User user : userRepository.findAll()) {
+            if(user.isAdmin()) {
+                admins.add(user);
+            }
+        }
+        return admins;
+    }
+
     private boolean validateUser(User user)
     {
         Set<ConstraintViolation<User>> violations;
@@ -88,5 +125,6 @@ public class UserServiceImpl implements UserService {
             return true;
         else
             return false;
+
     }
 }
