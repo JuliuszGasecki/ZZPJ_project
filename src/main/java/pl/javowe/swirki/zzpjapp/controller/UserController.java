@@ -75,7 +75,6 @@ public class UserController {
     }
 
 
-
     @PutMapping("/user/{id}/addImage/{filename}")
     public byte[] addImageForUser(@PathVariable Long id, @PathVariable("filename") String filename) throws IOException, UserNotFoundException, UserInvalidDataException {
         this.userService.getUser(id).setLoadedPicture(imageServiceImpl.saveImageToByte(filename));
