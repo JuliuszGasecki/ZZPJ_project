@@ -7,6 +7,7 @@ import pl.javowe.swirki.zzpjapp.exception.UserNotFoundException;
 import pl.javowe.swirki.zzpjapp.model.User;
 import pl.javowe.swirki.zzpjapp.repository.UserRepository;
 
+import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;

@@ -1,25 +1,29 @@
 package pl.javowe.swirki.zzpjapp.service.forumservices;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import pl.javowe.swirki.zzpjapp.exception.ThreadAlreadyContainPost;
-import pl.javowe.swirki.zzpjapp.exception.ThreadNotContainingPost;
+import pl.javowe.swirki.zzpjapp.exception.PostNotFoundException;
 import pl.javowe.swirki.zzpjapp.exception.ThreadNotFoundException;
 import pl.javowe.swirki.zzpjapp.model.forumModel.Post;
 import pl.javowe.swirki.zzpjapp.model.forumModel.Thread;
+import pl.javowe.swirki.zzpjapp.repository.forumrepositories.PostRepository;
 import pl.javowe.swirki.zzpjapp.repository.forumrepositories.ThreadRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
-@Transactional
 public class ThreadForumService implements ForumService<Thread> {
 
     private ThreadRepository repository;
 
-    public ThreadForumService(ThreadRepository repository) {
+    @Autowired
+    private PostRepository postRepository;
+
+    public ThreadForumService(ThreadRepository repository, PostRepository postRepository) {
         this.repository = repository;
+        this.postRepository = postRepository;
     }
 
     @Override
@@ -39,14 +43,12 @@ public class ThreadForumService implements ForumService<Thread> {
     @Override
     public void add(Thread thread) {
 
-
         repository.save(thread);
 
     }
 
     @Override
     public void remove(Thread thread) throws ThreadNotFoundException {
-
 
         if (repository.existsById(thread.getId())) {
             repository.deleteById(thread.getId());
@@ -55,27 +57,24 @@ public class ThreadForumService implements ForumService<Thread> {
 
     }
 
-    public void addPostToThread(Thread thread, Post post) throws ThreadNotFoundException, ThreadAlreadyContainPost {
+    public void addPostToThread(Thread thread, Post post) {
 
-        if (getById(thread.getId()).getPosts().stream().filter(e -> e.getId() == (post.getId())).findAny().orElse(null) == null)
-        {
-            getById(thread.getId()).addPost(post);
-            System.out.println(getById(thread.getId()).getPosts().size());
-        }
+            post.setThread(thread);
+            postRepository.save(post);
 
-        else throw new ThreadAlreadyContainPost(thread, post.getId());
     }
 
-    public void removePostFromThread(long thread, long post) throws ThreadNotFoundException, ThreadNotContainingPost {
+    public void removePostFromThread(long post) throws PostNotFoundException {
 
-        if (getById(thread).getPosts().stream().filter(e -> e.getId() == (post)).findAny().orElse(null) != null)
-            repository.findById(thread).get().removePost(getById(thread).getPostByID(post));
-        else throw new ThreadNotContainingPost(getById(thread), post);
+        if(!postRepository.existsById(post))
+             throw new PostNotFoundException(post);
+
+        postRepository.delete(postRepository.getOne(post));
+
     }
 
     public List<Post> getPosts(Thread thread) {
-        System.out.println(repository.findById(thread.getId()).get().getPosts().size());
-        return repository.findById(thread.getId()).get().getPosts();
+        return postRepository.findAll().stream().filter( e -> e.getThread().getId() == thread.getId()).collect(Collectors.toList());
     }
 
 

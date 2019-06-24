@@ -5,17 +5,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import pl.javowe.swirki.zzpjapp.controller.UserController;
-import pl.javowe.swirki.zzpjapp.exception.ThreadAlreadyContainPost;
-import pl.javowe.swirki.zzpjapp.exception.UserInvalidDataException;
 import pl.javowe.swirki.zzpjapp.model.Locations;
 import pl.javowe.swirki.zzpjapp.model.User;
-import pl.javowe.swirki.zzpjapp.model.forumModel.Post;
 import pl.javowe.swirki.zzpjapp.model.forumModel.Thread;
-import pl.javowe.swirki.zzpjapp.repository.UserRepository;
 import pl.javowe.swirki.zzpjapp.service.UserService;
-import pl.javowe.swirki.zzpjapp.service.forumservices.ForumService;
 import pl.javowe.swirki.zzpjapp.service.forumservices.ThreadForumService;
 
 @Slf4j
@@ -51,14 +44,14 @@ public class ZzpjAppApplication {
 		return e -> {
 			Thread thread = new Thread(userService.getUser(1L),"Why java is so bad ","Why?");
 			forumService.add(thread);
-			try {
-				forumService.addPostToThread(thread,new Post(userService.getUser(1L),"Dont know 1"));
-				forumService.addPostToThread(thread,new Post(userService.getUser(1L),"Dont know 2"));
-				forumService.addPostToThread(thread,new Post(userService.getUser(1L),"Dont know 2"));
-				System.out.println("CZY DZIAŁA? " +  forumService.getPosts(thread).size());
-			} catch (ThreadAlreadyContainPost threadAlreadyContainPost) {
-				threadAlreadyContainPost.printStackTrace();
-			}
+//			try {
+//				forumService.addPostToThread(thread,new Post(userService.getUser(1L),"Dont know 1"));
+//				forumService.addPostToThread(thread,new Post(userService.getUser(1L),"Dont know 2"));
+//				forumService.addPostToThread(thread,new Post(userService.getUser(1L),"Dont know 3"));
+//				//System.out.println("CZY DZIAŁA? " +  forumService.getPosts(thread).size());
+//			} catch (ThreadAlreadyContainPost threadAlreadyContainPost) {
+//				threadAlreadyContainPost.printStackTrace();
+//			}
 		};
 	}
 }

@@ -1,5 +1,6 @@
 package pl.javowe.swirki.zzpjapp.model.forumModel;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import pl.javowe.swirki.zzpjapp.model.User;
@@ -26,8 +27,9 @@ public class Post {
     @Column(name = "body")
     private String body;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.PERSIST)
     @JoinColumn(name = "thread")
+    @JsonBackReference
     private Thread thread;
 
     @Column(name = "userRating")
