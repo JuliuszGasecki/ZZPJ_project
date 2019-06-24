@@ -1,6 +1,6 @@
 package pl.javowe.swirki.zzpjapp.documents;
 
-import netscape.javascript.JSObject;
+//import netscape.javascript.JSObject;
 import org.json.JSONObject;
 
 public class ForumStatistics implements DocumentCreator{
