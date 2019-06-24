@@ -43,8 +43,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         //For not logged in
         http.authorizeRequests().antMatchers("/", "/login").permitAll().antMatchers("/css/**", "/js/**", "fonts/**").permitAll();
         //For Admins Only
-        http.authorizeRequests().antMatchers("/admins", "/removeAdmin/*", "/admin/*", "/setAdmin/*", "/deleteUser/*").hasAnyRole("ADMIN", "USER");
-
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/users/*").hasRole("ADMIN").antMatchers("/admins", "/removeAdmin/*", "/admin/*", "/setAdmin/*", "/deleteUser/*").hasAnyRole("ADMIN");
+        http.authorizeRequests().anyRequest().authenticated();
         http.formLogin().defaultSuccessUrl("/users");
 
     }
