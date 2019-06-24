@@ -13,8 +13,11 @@ import pl.javowe.swirki.zzpjapp.documents.ForumStatistics;
 import pl.javowe.swirki.zzpjapp.documents.UsersStatistics;
 import pl.javowe.swirki.zzpjapp.model.User;
 import pl.javowe.swirki.zzpjapp.repository.UserRepository;
+import pl.javowe.swirki.zzpjapp.repository.forumrepositories.PostRepository;
+import pl.javowe.swirki.zzpjapp.repository.forumrepositories.ThreadRepository;
 import pl.javowe.swirki.zzpjapp.service.UserService;
 import pl.javowe.swirki.zzpjapp.service.UserServiceImpl;
+import pl.javowe.swirki.zzpjapp.service.forumservices.ForumServiceImpl;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -30,11 +33,13 @@ public class DocumentCreatorController {
     private ValidatorFactory factory;
     private Validator validator;
     private DocumentStrategy documentStrategy;
+    private ForumServiceImpl forumService;
 
     @Autowired
-    public DocumentCreatorController(UserRepository repository) {
+    public DocumentCreatorController(UserRepository repository, ThreadRepository thredRepository, PostRepository postRepository) {
 
         this.repository = repository;
+        this.forumService = new ForumServiceImpl(thredRepository,postRepository);
         userService = new UserServiceImpl(repository);
         factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
@@ -49,7 +54,7 @@ public class DocumentCreatorController {
 
     @GetMapping("/createStatisticsUser") //<- method for http Get request
     public String createDocumentUser(){
-        documentStrategy.documentCreator = new UsersStatistics(userService.getAllUsers());
+        documentStrategy.documentCreator = new UsersStatistics(userService.getAllUsers(), forumService.getAll());
         JSONObject document = documentStrategy.documentCreator.create();
         return document.toString();
 
