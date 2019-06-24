@@ -19,12 +19,12 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "post_id")
     private long id;
 
     @ManyToOne
     @NotNull
-    @JoinColumn(name = "author", nullable = false)
+    @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
     @NotEmpty
@@ -35,28 +35,15 @@ public class Post {
     //@ManyToOne
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.PERSIST)
-    @JoinColumn(name = "thread")
-    /*
-    @JoinTable(
-            name = "post_thread",
-            joinColumns =  @JoinColumn(
-                    name = "post_id",
-                    referencedColumnName = "id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name="thread_id",
-                    referencedColumnName = "id"
-            )
-    )
-    */
+    @JoinColumn(name = "thread_id")
     @JsonBackReference
     private Thread thread;
 
-    @Column(name = "userRating", nullable = false)
+    @Column(name = "user_rating", nullable = false)
     private int userRating = 0;
 
     @PastOrPresent
-    @Column(name = "creationDate", nullable = false)
+    @Column(name = "creation_date", nullable = false)
     private Date creationDate;
 
     public Post()

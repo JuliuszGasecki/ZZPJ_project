@@ -4,6 +4,7 @@ import lombok.Data;
 import pl.javowe.swirki.zzpjapp.model.User;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.util.Calendar;
@@ -16,24 +17,12 @@ public class Thread {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @Column(name = "thread_id", nullable = false)
     private long id;
 
     @ManyToOne
-    //@JoinColumn(name = "author")
-    @JoinTable(
-            name = "Thread_User",
-            joinColumns =  @JoinColumn(
-                    name = "thread_id",
-                    referencedColumnName = "id",
-                    nullable = false
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name="user_id",
-                    referencedColumnName = "id",
-                    nullable = false
-            )
-    )
+    @NotNull
+    @JoinColumn(name = "author_id")
     private User author;
 
     @NotEmpty
@@ -46,31 +35,14 @@ public class Thread {
     private String description;
 
     @PastOrPresent
-    @Column(name = "creationdate", nullable = false)
+    @Column(name = "creation_date", nullable = false)
     private Date creationDate;
 
-    @Column(name = "isclosed", nullable = false)
+    @Column(name = "is_closed", nullable = false)
     private boolean isClosed = false;
 
-    @Column (name = "userrating", nullable = false)
+    @Column (name = "user_rating", nullable = false)
     private int userRating = 0;
-/*
-    //@OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(
-            name = "Thread_Post",
-            joinColumns =  @JoinColumn(
-                    name = "thread_id",
-                    referencedColumnName = "id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name="post_id",
-                    referencedColumnName = "id"
-            )
-    )
-    private List<Post> posts = new ArrayList<>();
-
-*/
 
     public Thread(User author, String title, String description) {
         this.author = author;
