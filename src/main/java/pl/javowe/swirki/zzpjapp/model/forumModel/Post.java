@@ -1,11 +1,14 @@
 package pl.javowe.swirki.zzpjapp.model.forumModel;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Data;
-import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import pl.javowe.swirki.zzpjapp.model.User;
-
 import javax.persistence.*;
-import java.util.ArrayList;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -15,25 +18,45 @@ import java.util.Date;
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) //primary key generated with TopLink
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "author")
+    @NotNull
+    @JoinColumn(name = "author", nullable = false)
     private User author;
 
-    @Column(name = "body")
+    @NotEmpty
+    @Size(max = 500)
+    @Column(name = "body", nullable = false)
     private String body;
 
-    @ManyToOne
+    //@ManyToOne
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.PERSIST)
     @JoinColumn(name = "thread")
+    /*
+    @JoinTable(
+            name = "post_thread",
+            joinColumns =  @JoinColumn(
+                    name = "post_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name="thread_id",
+                    referencedColumnName = "id"
+            )
+    )
+    */
+    @JsonBackReference
     private Thread thread;
 
-    @Column(name = "userRating")
+    @Column(name = "userRating", nullable = false)
     private int userRating = 0;
 
-    @Column(name = "creationDate")
+    @PastOrPresent
+    @Column(name = "creationDate", nullable = false)
     private Date creationDate;
 
     public Post()

@@ -16,4 +16,9 @@ public class PostCreationRequest {
         this.userID = userID;
         this.body = body;
     }
+
+    public PostCreationRequest()
+    {
+
+    }
 }

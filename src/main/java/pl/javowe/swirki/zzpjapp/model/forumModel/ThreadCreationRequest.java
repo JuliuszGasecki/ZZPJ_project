@@ -3,7 +3,7 @@ package pl.javowe.swirki.zzpjapp.model.forumModel;
 import lombok.Data;
 
 @Data
-public class ThreadCreateRequest {
+public class ThreadCreationRequest {
 
     private long userID;
 
@@ -11,9 +11,14 @@ public class ThreadCreateRequest {
 
     private String description;
 
-    public ThreadCreateRequest(long userID, String title, String description) {
+    public ThreadCreationRequest(long userID, String title, String description) {
         this.userID = userID;
         this.tile = title;
         this.description = description;
+    }
+
+    public ThreadCreationRequest()
+    {
+
     }
 }
