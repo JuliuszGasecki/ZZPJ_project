@@ -1,7 +1,6 @@
 package pl.javowe.swirki.zzpjapp.model;
 
 import lombok.Data;
-import org.hibernate.annotations.Table;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
@@ -13,7 +12,7 @@ import java.util.Locale;
 
 @Data //provides getters, setters, HashCodeAndEquals, RequiredArgsConstructor, to string
 @Entity // <- JPA entity
-@Table(appliesTo = "user")
+@Table(name = "user")
 public class User {
 
     @Id
@@ -51,7 +50,8 @@ public class User {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "picture", length = 10000000)
+    @Lob
+    @Column(name = "picture", length = 10000000, columnDefinition = "BLOB")
     private byte[] loadedPicture;
 
    /* //TODO programming languages class with experience level

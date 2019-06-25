@@ -8,12 +8,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import pl.javowe.swirki.zzpjapp.controller.UserController;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import pl.javowe.swirki.zzpjapp.defaultAvatar.AvatarFactory;
 import pl.javowe.swirki.zzpjapp.exception.UserInvalidDataException;
 import pl.javowe.swirki.zzpjapp.model.Locations;
 import pl.javowe.swirki.zzpjapp.model.User;
 import pl.javowe.swirki.zzpjapp.model.forumModel.Post;
 import pl.javowe.swirki.zzpjapp.model.forumModel.Thread;
 import pl.javowe.swirki.zzpjapp.repository.UserRepository;
+import pl.javowe.swirki.zzpjapp.service.ImageServiceImpl;
 import pl.javowe.swirki.zzpjapp.service.UserService;
 import pl.javowe.swirki.zzpjapp.service.forumservices.ForumServiceImpl;
 
@@ -29,7 +31,12 @@ public class ZzpjAppApplication {
 	@Bean
 	CommandLineRunner initDatabase(UserService service, ForumServiceImpl forumService) {
 		return args -> {
-			service.addUser(new User("A", "admin1", "abc@gmail.com", 34, Locations.Poland, "Julek", "Gąska", true, "nie lubi w pupe"));
+			ImageServiceImpl imageService = new ImageServiceImpl();
+			AvatarFactory avatarFactory = new AvatarFactory();
+			User user = new User("A", "admin1", "abc@gmail.com", 34, Locations.Poland, "Julek", "Gąska", true, "nie lubi w pupe");
+			//user.setLoadedPicture(imageService.saveImageToByte("test"));
+			user.setLoadedPicture(avatarFactory.getDefaultAvatar(10L));
+			service.addUser(user);
 			service.addUser(new User("B","admin1", "example@gmail.com", 22, Locations.Ukraine, "Jan", "Kowalski", false, "Jan Kowalski"));
 			service.addUser(new User("C","admin1", "abc@example.com", 30, Locations.Poland, "Anna", "Kowalska", false, "Anna Kowalska"));
             service.addUser(new User("Ziutek", "admin1","abc@gmail.com", 34, Locations.Poland, "Julek", "Gąska", true, "Krul javowych świrków"));
